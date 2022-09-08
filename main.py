@@ -61,11 +61,14 @@ class Exercise3(object):
             project = max(projects_results, key=lambda x: x['mean'])
         # If project is not profitable, then it is not recommended
         if project['positive_rate'] == 0:
-            print(f"No se recomienda invertir en el proyecto {project['name']} ni en ninguno de los otros proyectos")
+            print(
+                f"No se recomienda invertir en el proyecto {project['name']} ni en ninguno de los otros proyectos")
         else:
             print(f"El proyecto más rentable es: {project['name']}")
-            print(f"La probabilidad de que el proyecto sea rentable es: {project['positive_rate'] / project['iterations']}")
-            print(f"La media del valor actual neto es: {project['mean']} en {project['iterations']} simulaciones")
+            print(
+                f"La probabilidad de que el proyecto sea rentable es: {project['positive_rate'] / project['iterations']}")
+            print(
+                f"La media del valor actual neto es: {project['mean']} en {project['iterations']} simulaciones")
             print(f"La inversión inicial es: {project['investment']}")
 
     def execute(self):
@@ -74,7 +77,7 @@ class Exercise3(object):
             'normal', -700, 150), ('normal', 300, 200), ('normal', 400, 200), ('normal', 500, 200), ('uniform', 200, 8440)]}
         project2 = {"name": "Centro Comercial", "data": [(None, -900, None), ('normal', -600, 50), ('normal', -200, 100), (
             'normal', -600, 100), ('normal', 250, 150), ('normal', 350, 150), ('normal', 400, 150), ('uniform', 1600, 6000)]}
-        simulation_iterations = [100, 1000, 10000] # n of simulations
+        simulation_iterations = [100, 1000, 10000]  # n of simulations
         for n in simulation_iterations:
             print(f"\nResultados de la simulación con {n} iteraciones")
             projects_results = []
@@ -98,8 +101,7 @@ class Exercise3(object):
                     npvs.append(npv)
                 project_results = {
                     "name": project['name'],
-                    "npvs": npvs,
-                    "positive_rate": sum([ self.decision(npv) for npv in npvs]),
+                    "positive_rate": sum([self.decision(npv) for npv in npvs]),
                     "mean": np.mean(npvs),
                     "investment": project['data'][0][1],
                     "iterations": n
@@ -108,15 +110,64 @@ class Exercise3(object):
             # print results.
             self.compare_results(projects_results)
 
-
+# Find the best quantity to buy
 class Exercise4(object):
 
     def __init__(self):
         pass
 
     def execute(self):
-        pass
-
+        product_quantity = [9, 10, 11]
+        product_price = 1.5
+        product_selling_price = 2.5
+        product_not_sell_refund = 0.5
+        simulation_days = [3]
+        for days in simulation_days:
+            if days == 30:
+                print("\nResultados para 30 días")
+            elif days == 365:
+                print("\nResultados para 1 año")
+            else:
+                print("\nResultados para 10 años")
+            for quantity in product_quantity:
+                # simulation for each day
+                for _ in range(days):
+                    gains = 0
+                    # purchase of products to sell
+                    gains -= (quantity * product_price)
+                    products_not_sold = quantity
+                    products_I_could_sell = 0
+                    # random number of products sold
+                    random_probability = random.random()
+                    # 30% when quantity requested is 9
+                    if random_probability < 0.3:
+                        gains += (9 * product_selling_price)
+                        products_not_sold -= 9
+                    # 40% when quantity requested is 10
+                    elif 0.3 <= random_probability < 0.7:
+                        if quantity < 10:
+                            gains += (quantity * product_selling_price)
+                            products_not_sold -= quantity
+                            products_I_could_sell = 10 - quantity
+                        else:
+                            gains += (10 * product_selling_price)
+                            products_not_sold -= 10
+                    # 30% when quantity requested is 11
+                    elif 0.7 <= random_probability <= 1:
+                        if quantity < 11:
+                            gains += (quantity * product_selling_price)
+                            products_not_sold -= quantity
+                            products_I_could_sell = 11 - quantity
+                        else:
+                            gains += (11 * product_selling_price)
+                            products_not_sold -= 11
+                    # refund of products not sold
+                    gains += (products_not_sold * product_not_sell_refund)
+                    print(f"Productos comprados: {quantity}")
+                    print(f"Productos vendidos: {quantity - products_not_sold}")
+                    print(f"Productos no vendidos: {products_not_sold}")
+                    print(f"Productos que pude vender: {products_I_could_sell}")
+                    print(gains)
 
 exercise1 = Exercise1()
 exercise2 = Exercise2()
@@ -124,5 +175,5 @@ exercise3 = Exercise3()
 exercise4 = Exercise4()
 # exercise1.execute()
 # exercise2.execute()
-exercise3.execute()
-# exercise4.execute()
+# exercise3.execute()
+exercise4.execute()
