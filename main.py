@@ -1,3 +1,4 @@
+from statistics import mean
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 import random
@@ -116,22 +117,47 @@ class Exercise4(object):
     def __init__(self):
         pass
 
+    def validate(self, results):
+        for product in results:
+            print(f"Resultados para el caso de {product[0]['quantity']} periodicos")
+            gains_list = [x['gains'] for x in product]
+            #solds_list = [x['sold'] for x in product]
+            not_solds_list = [x['not_sold'] for x in product]
+            could_sell_list = [x['could_sell'] for x in product]
+            print(f" - La ganancia es: {sum(gains_list)} y el promedio por dia es: {mean(gains_list)}")
+            print(f" - El promedio de periodicos no vendidos es: {mean(not_solds_list)}")
+            print(f" - El promedio de periodicos que pude haber vendido es: {mean(could_sell_list)}")
+        print("-------")
+        # Get the product with the highest gains mean
+        product = max(results, key=lambda x: mean([y['gains'] for y in x]))
+        # Check if another product has the same gains mean
+        if len(list(filter(lambda x: mean([y['gains'] for y in x]) == mean([y['gains'] for y in product]), results))) > 1:
+            # Get the product with the lowest not sold mean
+            product = min(results, key=lambda x: mean([y['not_sold'] for y in x]))
+            # Check if another product has the same not sold mean
+            if len(list(filter(lambda x: mean([y['not_sold'] for y in x]) == mean([y['not_sold'] for y in product]), results))) > 1:
+                # Get the product with the lowest could sell mean
+                product = min(results, key=lambda x: mean([y['could_sell'] for y in x]))
+        print(f"La cantidad de periodicos a comprar es: {product[0]['quantity']}")
+
     def execute(self):
         product_quantity = [9, 10, 11]
         product_price = 1.5
         product_selling_price = 2.5
         product_not_sell_refund = 0.5
-        simulation_days = [3]
+        simulation_days = [30, 365, 3650]
         for days in simulation_days:
             if days == 30:
-                print("\nResultados para 30 días")
+                print("\nResultados para 30 días:")
             elif days == 365:
-                print("\nResultados para 1 año")
+                print("\nResultados para 1 año:")
             else:
-                print("\nResultados para 10 años")
+                print("\nResultados para 10 años:")
+            products_results = []
             for quantity in product_quantity:
+                simulation_results = []
                 # simulation for each day
-                for _ in range(days):
+                for day in range(days):
                     gains = 0
                     # purchase of products to sell
                     gains -= (quantity * product_price)
@@ -163,11 +189,18 @@ class Exercise4(object):
                             products_not_sold -= 11
                     # refund of products not sold
                     gains += (products_not_sold * product_not_sell_refund)
-                    print(f"Productos comprados: {quantity}")
-                    print(f"Productos vendidos: {quantity - products_not_sold}")
-                    print(f"Productos no vendidos: {products_not_sold}")
-                    print(f"Productos que pude vender: {products_I_could_sell}")
-                    print(gains)
+                    day_results = {
+                        "quantity": quantity,
+                        "gains": gains,
+                        "days_n": days,
+                        "day_i": day,
+                        "sold": quantity - products_not_sold,
+                        "not_sold": products_not_sold,
+                        "could_sell": products_I_could_sell,
+                    }
+                    simulation_results.append(day_results)
+                products_results.append(simulation_results)
+            self.validate(products_results)
 
 exercise1 = Exercise1()
 exercise2 = Exercise2()
