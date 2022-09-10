@@ -7,12 +7,48 @@ import numpy as np
 
 
 class Exercise1(object):
+    
 
     def __init__(self):
-        pass
+        
+        self.x_arr = []
+        self.y_arr = []
+        self.p = 1/3
+        self.x = 0
+        self.y = 0
 
-    def execute(self, n):
-        pass
+    def half_func(self,x, y):
+        x, y = x/2, y/2
+        return x, y
+
+    def half_func_dotFive(self, x, y):
+        x, y = ((x+1)/2), y/2
+        return x, y
+
+    def half_func_dot_quarter_five(self, x, y):
+        x, y = (((2*x)+1)/4), ((y+1)/2)
+        return x, y
+
+    def execute(self):
+
+        self.x, self.y = 0.5, 0.5
+        random_ = 0
+        for i in range(1000000):
+            random_ = random.random()
+            self.x_arr.append(self.x)
+            self.y_arr.append(self.y)
+
+            if (random_ < self.p):
+                func = self.half_func
+            elif (self.p <= random_ and random_ < (1-self.p)):
+                func = self.half_func_dotFive
+            else:
+                func = self.half_func_dot_quarter_five
+
+            self.x, self.y = func(self.x, self.y)
+
+        plt.scatter(self.x_arr, self.y_arr, color='blue', marker='8', edgecolors='purple')
+        plt.show()  
 
 # Cumulative ponderated function
 
@@ -206,7 +242,7 @@ exercise1 = Exercise1()
 exercise2 = Exercise2()
 exercise3 = Exercise3()
 exercise4 = Exercise4()
-# exercise1.execute()
+exercise1.execute()
 # exercise2.execute()
 # exercise3.execute()
-exercise4.execute()
+#exercise4.execute()
