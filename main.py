@@ -56,12 +56,48 @@ class Exercise1(object):
 class Exercise2(object):
 
     def __init__(self):
-        pass
+        
+        self.probs = [0.80, 0.07, 0.13]
+        self.x_arr = []
+        self.y_arr = []
+        self.x = 0
+        self.y = 0
 
-    # Receives a probability mass function
-    def execute(self, pmf):
-        pass
+    def dist_1(self,x, y):
+        x, y = (x/5 + (13/50)*y), (((23*x)/100) + (11/50)*y + (3/5))
+        return x, y
 
+    def dist_2(self, x, y):
+        x, y = 0, ((4*y)/25)
+        return x, y
+
+    def dist_3(self, x, y):
+        x, y = ((x*3)/20 + (7/25)*y), (((13*x)/50) + (6/25)*y + (11/25))
+        return x, y
+
+    def execute(self):
+
+        self.x, self.y = 1/2, 1/2
+        random_ = 0
+        for i in range(1000000):
+            random_ = random.random()
+            self.x_arr.append(self.x)
+            self.y_arr.append(self.y)
+    
+            if (random_ < self.probs[0]):
+                func = self.dist_1
+            elif (self.probs[0] <= random_ and random_ < (self.probs[0] + self.probs[1])):
+                func = self.dist_2
+            else:
+                func = self.dist_3
+
+            self.x, self.y = func(self.x, self.y)
+
+        plt.hist(self.x_arr, color='blue')
+        plt.xlabel('Probs')
+        plt.ylabel('Frequency')
+        plt.title('Histogram of repetitions')
+        plt.show() 
 # Project rentability
 
 
@@ -242,7 +278,7 @@ exercise1 = Exercise1()
 exercise2 = Exercise2()
 exercise3 = Exercise3()
 exercise4 = Exercise4()
-exercise1.execute()
-# exercise2.execute()
+#exercise1.execute()
+exercise2.execute()
 # exercise3.execute()
 #exercise4.execute()
