@@ -1,16 +1,12 @@
 from statistics import mean
 import matplotlib.pyplot as plt
-from scipy.stats import norm
 import random
-import math
 import numpy as np
 
-
+# Cumulative ponderated function
 class Exercise1(object):
-    
 
     def __init__(self):
-        
         self.x_arr = []
         self.y_arr = []
         self.p = 1/3
@@ -30,7 +26,6 @@ class Exercise1(object):
         return x, y
 
     def execute(self):
-
         self.x, self.y = 0.5, 0.5
         random_ = 0
         for i in range(1000000):
@@ -51,12 +46,9 @@ class Exercise1(object):
         plt.show()  
 
 # Cumulative ponderated function
-
-
 class Exercise2(object):
 
     def __init__(self):
-        
         self.probs = [0.80, 0.07, 0.13]
         self.x_arr = []
         self.y_arr = []
@@ -76,7 +68,6 @@ class Exercise2(object):
         return x, y
 
     def execute(self):
-
         self.x, self.y = 1/2, 1/2
         random_ = 0
         for i in range(1000000):
@@ -97,10 +88,9 @@ class Exercise2(object):
         plt.xlabel('Probs')
         plt.ylabel('Frequency')
         plt.title('Histogram of repetitions')
-        plt.show() 
+        plt.show()
+
 # Project rentability
-
-
 class Exercise3(object):
 
     def __init__(self):
@@ -278,7 +268,24 @@ exercise1 = Exercise1()
 exercise2 = Exercise2()
 exercise3 = Exercise3()
 exercise4 = Exercise4()
-#exercise1.execute()
-exercise2.execute()
-# exercise3.execute()
-#exercise4.execute()
+option = 0
+while option != 5:
+    print("\nSeleccione el ejercicio a ejecutar:")
+    print("1. Ejercicio 1")
+    print("2. Ejercicio 2")
+    print("3. Ejercicio 3")
+    print("4. Ejercicio 4")
+    print("5. Salir")
+    option = int(input("Opción: "))
+    if option == 1:
+        exercise1.execute()
+    elif option == 2:
+        exercise2.execute()
+    elif option == 3:
+        exercise3.execute()
+    elif option == 4:
+        exercise4.execute()
+    elif option == 5:
+        print("Saliendo...")
+    else:
+        print("Opción no válida")
